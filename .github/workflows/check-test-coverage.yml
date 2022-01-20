@@ -1,0 +1,67 @@
+name: Check-Test-Coverage Workflow
+
+on: [push]
+
+# TODO
+# install dependencies
+# keep intermediate coverage info for one day
+
+jobs:
+  style-check: 
+  runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.10'
+      - name: "Install style checker"
+        run: pip install --user black
+      - name: "Run style check"
+        run: black --check .
+        
+  test:
+    runs-on: ubuntu-latest
+    needs: style-check
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.10'
+      - name: "Install dependencies"
+        run: pip install -user pytest & numpy & matplotlib  & unittest & coverage
+      - name: "Run unittest"
+        run: python -m unittest
+      - name: "Run coverage"
+        run: coverage run -m pytest
+      - name: "Upload coverage as artifact"
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: .coverage
+          retetention-days: 1 
+
+  coverage_report:
+    runs-on: ubuntu-latest
+    needs: test
+    steps: 
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.10'
+      - name: "Install dependencies"
+        run: pip install --user coverage
+      - name: "Downloade coverage"
+        run: actions/download-artifact@v2
+        with:
+          name: coverage
+
+      - name: "Create coverage report"
+        run: coverage report 
+      - name: "Create coverage xml report"
+        run: coverage xml
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          path: coverage.xml
+          retetention-days: 14 
