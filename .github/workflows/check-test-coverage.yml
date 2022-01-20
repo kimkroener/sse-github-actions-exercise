@@ -23,9 +23,9 @@ jobs:
         with:
           python-version: '3.8.10'
       - name: "Install dependencies"
-        run: pip install -user pytest & numpy & matplotlib  & unittest & coverage
-      - name: "Run unittest"
-        run: python -m unittest
+        run: pip install --user pytest numpy matplotlib coverage
+      - name: "Run pytest"
+        run: python -m pytest
       - name: "Run coverage"
         run: coverage run -m pytest
       - name: "Upload coverage as artifact"
