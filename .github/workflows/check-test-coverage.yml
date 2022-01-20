@@ -2,10 +2,6 @@ name: Check-Test-Coverage Workflow
 
 on: [push]
 
-# TODO
-# install dependencies
-# keep intermediate coverage info for one day
-
 jobs:
   style-check: 
   runs-on: ubuntu-latest
