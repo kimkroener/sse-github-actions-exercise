@@ -45,10 +45,9 @@ jobs:
       - name: "Install dependencies"
         run: pip install --user coverage
       - name: "Downloade coverage"
-        run: actions/download-artifact@v2
+        uses: actions/download-artifact@v2
         with:
           name: coverage
-
       - name: "Create coverage report"
         run: coverage report 
       - name: "Create coverage xml report"
